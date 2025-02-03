@@ -50,20 +50,19 @@ contract VotingSystem is IVotingSystem {
     }
 
     function vote(uint _candidateId) public hasStaked override {
+        require(_isValidCandidate(_candidateId), "Invalid candidate ID");
         require(!hasVoted[msg.sender], "You have already voted");
-        require(_candidateId < candidateCount, "Invalid candidate ID");
 
         hasVoted[msg.sender] = true;
-        candidates[_candidateId].voteCount++;
+        _increaseVoteCount(_candidateId);
 
-        // Reward voters with tokens
         rewardToken.transfer(msg.sender, 10 * 10**18);
 
         emit VoteCasted(msg.sender, _candidateId);
     }
 
     function getCandidate(uint _candidateId) public view override returns (string memory, uint) {
-        require(_candidateId < candidateCount, "Invalid candidate ID");
+        require(_isValidCandidate(_candidateId), "Invalid candidate ID");
         return (candidates[_candidateId].name, candidates[_candidateId].voteCount);
     }
 
@@ -76,8 +75,24 @@ contract VotingSystem is IVotingSystem {
     function withdraw() public {
         uint amount = stakedAmount[msg.sender];
         require(amount > 0, "No ETH to withdraw");
+
         stakedAmount[msg.sender] = 0;
         payable(msg.sender).transfer(amount);
         emit Withdrawn(msg.sender, amount);
+    }
+
+    function _isValidCandidate(uint _candidateId) internal view returns (bool) {
+        return _candidateId < candidateCount;
+    }
+
+    function _increaseVoteCount(uint _candidateId) internal {
+        candidates[_candidateId].voteCount++;
+    }
+
+    function calculateVotePercentage(uint candidateVotes, uint totalVotes) public pure returns (uint) {
+        if (totalVotes == 0) {
+            return 0;
+        }
+        return (candidateVotes * 100) / totalVotes;
     }
 }

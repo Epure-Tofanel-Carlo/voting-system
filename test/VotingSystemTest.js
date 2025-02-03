@@ -44,6 +44,23 @@ describe("VotingSystem", function () {
             .to.changeEtherBalance(addr1, ethers.parseEther("0.5"));
     });
 
+    it("Should correctly calculate vote percentage", async function () {
+        const result = await voting.calculateVotePercentage(25, 100);
+        expect(result).to.equal(25);
+    
+        const zeroVotes = await voting.calculateVotePercentage(0, 100);
+        expect(zeroVotes).to.equal(0);
+    
+        const zeroTotalVotes = await voting.calculateVotePercentage(50, 0);
+        expect(zeroTotalVotes).to.equal(0);
+    });
+
+    it("Should not allow voting for non-existent candidates", async function () {
+        await voting.connect(addr1).stake({ value: ethers.parseEther("0.1") });
+    
+        await expect(voting.connect(addr1).vote(99)).to.be.revertedWith("Invalid candidate ID");
+    });
+
     it("Should distribute ERC20 tokens as rewards for voting", async function () {
         await voting.addCandidate("Alice");
         await voting.connect(addr1).stake({ value: ethers.parseEther("0.1") });
