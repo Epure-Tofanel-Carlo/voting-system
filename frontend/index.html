@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting System dApp</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .error {
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            display: none;
+        }
+        .success {
+            color: #388e3c;
+            background: #e8f5e9;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            display: none;
+        }
+        button {
+            background-color: #1976d2;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #1565c0;
+        }
+        .vote-button {
+            background-color: #4caf50;
+        }
+        .vote-button:hover {
+            background-color: #388e3c;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .candidate {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .candidate-info {
+            flex-grow: 1;
+        }
+        .candidate-info p {
+            margin: 5px 0;
+        }
+        #accountInfo {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        #accountInfo p {
+            margin: 5px 0;
+        }
+        #stakedInfo {
+            font-weight: bold;
+            color: #1976d2;
+            margin: 10px 0;
+        }
+        #votingActions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        h1, h2, h3 {
+            color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Voting System dApp</h1>
+    
+    <div class="container">
+        <h2>Account Information</h2>
+        <div id="accountInfo">Not connected</div>
+        <div id="stakedInfo">Staked Amount: 0 ETH</div>
+        <button id="connectWallet">Connect Wallet</button>
+    </div>
+
+    <div class="container">
+        <h2>Voting System</h2>
+        <div id="candidatesList">
+            <!-- Candidates will be loaded here -->
+        </div>
+        <div id="votingActions">
+            <h3>Actions</h3>
+            <div>
+                <input type="number" id="stakeAmount" step="0.01" min="0" placeholder="Amount to stake (ETH)">
+                <button id="stakeButton">Stake ETH</button>
+            </div>
+            <button id="withdrawButton">Withdraw Staked ETH</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Debug Tools</h2>
+        <button id="debugButton">Debug Contract</button>
+        <button id="refreshButton">Refresh Candidates</button>
+    </div>
+
+    <div id="error" class="error"></div>
+    <div id="success" class="success"></div>
+
+    <script src="app.js"></script>
+</body>
+</html> 
